@@ -128,7 +128,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[50%] bg-fem-red/5 blur-[120px] rounded-full" />
       </div>
 
-     {/* HERO SECTION - MOBILE REFINED (Link Súmulas Antes do Botão) */}
+    {/* HERO SECTION - REFINADA PARA PC E MOBILE (CORRIGIDA) */}
 <section className="relative min-h-[90vh] md:min-h-screen flex items-center px-6 md:px-20 z-10 overflow-hidden bg-white">
   
   {/* BACKGROUND LOGIC */}
@@ -144,7 +144,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
       <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent" />
     </div>
 
-    {/* Mobile Background: Apenas luzes suaves, sem ruído visual */}
+    {/* Mobile Background */}
     <div className="md:hidden absolute inset-0 overflow-hidden bg-white">
       <div className="absolute top-0 right-0 w-64 h-64 bg-fem-red/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-gray-50 rounded-full blur-[100px]" />
@@ -153,16 +153,16 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto relative z-10 pt-10 md:pt-0">
     
-    {/* TEXT CONTENT */}
+    {/* TEXT CONTENT - Alinhamento corrigido para PC (Sem comentários internos para evitar erro de parsing) */}
     <motion.div 
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
       transition={{ duration: 0.8 }}
-      className="text-left"
+      className="text-left order-2 md:order-1 md:mt-15" 
     >
       <div className="flex items-center gap-2 mb-6">
         <span className="h-[2px] w-8 md:w-12 bg-fem-red"></span>
-        <span className="text-fem-red font-black tracking-[0.2em] uppercase text-[9px] md:text-xs">
+        <span className="text-fem-red font-black tracking-[0.2em] uppercase text-[10px] md:text-xs">
           Federação Mineira de Futebol 7
         </span>
       </div>
@@ -177,10 +177,8 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         Excelência técnica e autoridade na arbitragem mais respeitada do país.
       </p>
 
-      {/* BUTTONS SECTION - REORDERED FOR MOBILE */}
-      <div className="flex flex-col gap-8 items-start">
-        
-        {/* 1. Consultar Súmulas (Aparece primeiro no Mobile) */}
+      {/* BUTTONS SECTION */}
+      <div className="flex flex-col gap-6 md:gap-8 items-start">
         <Link href="/sumulas" className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-black hover:text-fem-red transition-all group">
           <div className="w-10 h-10 border-2 border-fem-red/10 bg-white rounded-full flex items-center justify-center group-hover:bg-fem-red group-hover:text-white transition-all shadow-sm">
             <Activity size={18} />
@@ -188,7 +186,6 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
           <span className="border-b-2 border-black/5 group-hover:border-fem-red transition-all">Consultar Súmulas Oficiais</span>
         </Link>
 
-        {/* 2. Botão Principal do Curso */}
         <a href="#curso" className="w-full sm:w-auto">
           <button className="group relative bg-fem-red text-white px-10 py-5 overflow-hidden transition-all uppercase font-black tracking-widest text-xs w-full shadow-2xl shadow-fem-red/30">
             <span className="relative z-10 flex items-center justify-center gap-3">
@@ -200,12 +197,12 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
       </div>
     </motion.div>
 
-    {/* LOGO - VISIBLE ONLY ON DESKTOP */}
+    {/* LOGO - CORRIGIDA PARA PC */}
     <motion.div 
       initial={{ opacity: 0, scale: 0.9 }} 
       animate={{ opacity: 1, scale: 1 }} 
       transition={{ duration: 1, delay: 0.2 }} 
-      className="hidden md:flex relative justify-center lg:justify-end"
+      className="hidden md:flex order-1 md:order-2 relative justify-center lg:justify-end"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-fem-red/5 rounded-full blur-[80px] animate-pulse" />
       <Image 
@@ -220,7 +217,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   <style jsx global>{`
     .stroke-text-dark { 
-      -webkit-text-stroke: 1px #000; 
+      -webkit-text-stroke: 1.5px #000; 
     }
     @media (min-width: 768px) {
       .stroke-text-dark { 
