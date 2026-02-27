@@ -151,7 +151,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
     </div>
   </div>
 
-  <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto relative z-10 pt-10 md:pt-0">
+  <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto relative z-10 pt-0 md:pt-0">
     
     {/* TEXT CONTENT - Alinhamento corrigido para PC (Sem comentários internos para evitar erro de parsing) */}
     <motion.div 
