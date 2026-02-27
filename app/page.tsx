@@ -1,4 +1,7 @@
 'use client'
+import { 
+  Instagram, 
+  Youtube,} from 'lucide-react'
 import { useState, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -125,74 +128,107 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[50%] bg-fem-red/5 blur-[120px] rounded-full" />
       </div>
 
-      {/* HERO SECTION - Ajuste de Legibilidade */}
-      <section className="relative min-h-screen flex items-center px-6 md:px-20 z-10 overflow-hidden">
+     {/* HERO SECTION - MOBILE REFINED (Link Súmulas Antes do Botão) */}
+<section className="relative min-h-[90vh] md:min-h-screen flex items-center px-6 md:px-20 z-10 overflow-hidden bg-white">
+  
+  {/* BACKGROUND LOGIC */}
+  <div className="absolute inset-0 z-0">
+    <div className="hidden md:block absolute inset-0">
+      <Image 
+        src="/banner.png" 
+        alt="Banner de fundo" 
+        fill 
+        className="object-cover object-center"
+        priority
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent" />
+    </div>
+
+    {/* Mobile Background: Apenas luzes suaves, sem ruído visual */}
+    <div className="md:hidden absolute inset-0 overflow-hidden bg-white">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-fem-red/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-gray-50 rounded-full blur-[100px]" />
+    </div>
+  </div>
+
+  <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto relative z-10 pt-10 md:pt-0">
+    
+    {/* TEXT CONTENT */}
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 0.8 }}
+      className="text-left"
+    >
+      <div className="flex items-center gap-2 mb-6">
+        <span className="h-[2px] w-8 md:w-12 bg-fem-red"></span>
+        <span className="text-fem-red font-black tracking-[0.2em] uppercase text-[9px] md:text-xs">
+          Federação Mineira de Futebol 7
+        </span>
+      </div>
+      
+      <h1 className="text-5xl md:text-8xl font-black italic uppercase leading-[0.95] md:leading-[0.9] tracking-tighter mb-6 md:mb-8 text-black">
+        A Força do <br /> 
+        <span className="text-transparent stroke-text-dark">FUT 7</span> em <br /> 
+        <span className="text-fem-red drop-shadow-[0_2px_10px_rgba(179,19,18,0.2)]">Minas.</span>
+      </h1>
+
+      <p className="text-gray-700 text-base md:text-xl max-w-md leading-relaxed mb-10 border-l-4 border-fem-red pl-6 font-medium italic">
+        Excelência técnica e autoridade na arbitragem mais respeitada do país.
+      </p>
+
+      {/* BUTTONS SECTION - REORDERED FOR MOBILE */}
+      <div className="flex flex-col gap-8 items-start">
         
-        {/* IMAGEM DE FUNDO (BANNER) */}
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src="/banner.png" 
-            alt="Banner de fundo" 
-            fill 
-            className="object-cover object-center"
-            priority
-          />
-          {/* MELHORIA 1: Gradiente direcional (da esquerda para a direita) 
-              Isso clareia o fundo apenas atrás do texto, preservando a foto na direita */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent" />
-        </div>
+        {/* 1. Consultar Súmulas (Aparece primeiro no Mobile) */}
+        <Link href="/sumulas" className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-black hover:text-fem-red transition-all group">
+          <div className="w-10 h-10 border-2 border-fem-red/10 bg-white rounded-full flex items-center justify-center group-hover:bg-fem-red group-hover:text-white transition-all shadow-sm">
+            <Activity size={18} />
+          </div>
+          <span className="border-b-2 border-black/5 group-hover:border-fem-red transition-all">Consultar Súmulas Oficiais</span>
+        </Link>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto relative z-10">
-          <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-            <div className="flex items-center gap-2 mb-6">
-              <span className="h-[2px] w-12 bg-fem-red"></span>
-              <span className="text-fem-red font-bold tracking-[0.2em] uppercase text-xs">Federação Mineira de Futebol 7</span>
-            </div>
-            
-            <h1 className="text-6xl md:text-8xl font-black italic uppercase leading-[0.9] tracking-tighter mb-8 text-black drop-shadow-sm">
-              A Força do <br /> 
-              <span className="text-transparent stroke-text-dark">FUT 7</span> em <br /> 
-              {/* MELHORIA 2: Sombra suave no vermelho para destacar sobre a foto */}
-              <span className="text-fem-red drop-shadow-[0_2px_10px_rgba(179,19,18,0.2)]">Minas.</span>
-            </h1>
+        {/* 2. Botão Principal do Curso */}
+        <a href="#curso" className="w-full sm:w-auto">
+          <button className="group relative bg-fem-red text-white px-10 py-5 overflow-hidden transition-all uppercase font-black tracking-widest text-xs w-full shadow-2xl shadow-fem-red/30">
+            <span className="relative z-10 flex items-center justify-center gap-3">
+              Curso de Árbitros <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </span>
+            <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0 mix-blend-difference"></div>
+          </button>
+        </a>
+      </div>
+    </motion.div>
 
-            {/* MELHORIA 3: Texto um pouco mais escuro e com peso médio para não sumir no fundo */}
-            <p className="text-gray-800 text-lg md:text-xl max-w-md leading-relaxed mb-10 border-l-2 border-fem-red/30 pl-6 font-medium">
-              Excelência técnica e autoridade na arbitragem mais respeitada do país.
-            </p>
+    {/* LOGO - VISIBLE ONLY ON DESKTOP */}
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.9 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      transition={{ duration: 1, delay: 0.2 }} 
+      className="hidden md:flex relative justify-center lg:justify-end"
+    >
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-fem-red/5 rounded-full blur-[80px] animate-pulse" />
+      <Image 
+        src="/logo.png" 
+        alt="FEM7SOC" 
+        width={500} 
+        height={500} 
+        className="relative z-10 drop-shadow-2xl" 
+      />
+    </motion.div>
+  </div>
 
-            <div className="flex flex-col sm:flex-row gap-6">
-              <a href="#curso">
-                <button className="group relative bg-fem-red text-white px-8 py-4 overflow-hidden transition-all uppercase font-black tracking-widest text-sm w-full sm:w-auto shadow-xl shadow-fem-red/20">
-                  <span className="relative z-10 flex items-center gap-2">
-                    Curso de Árbitros <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0 mix-blend-difference"></div>
-                </button>
-              </a>
-              
-              <Link href="/sumulas" className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-gray-800 hover:text-fem-red transition-colors group">
-                {/* Adicionado um leve fundo branco/blur no ícone para garantir visibilidade sobre a foto */}
-                <div className="w-10 h-10 border border-black/20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:border-fem-red transition-colors">
-                  <Activity size={18} />
-                </div>
-                Consultar Súmulas
-              </Link>
-            </div>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative flex justify-center lg:justify-end">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-fem-red/10 rounded-full blur-[100px] animate-pulse" />
-            <Image src="/logo.png" alt="FEM7SOC" width={500} height={500} className="relative z-10 drop-shadow-2xl" />
-          </motion.div>
-        </div>
-      </section>
-
-      <style jsx global>{`
-        .stroke-text-dark { 
-          -webkit-text-stroke: 1.5px #000; 
-        }
-      `}</style>
+  <style jsx global>{`
+    .stroke-text-dark { 
+      -webkit-text-stroke: 1px #000; 
+    }
+    @media (min-width: 768px) {
+      .stroke-text-dark { 
+        -webkit-text-stroke: 2px #000; 
+      }
+    }
+  `}</style>
+</section>
 
    {/* SEÇÃO 1: MANIFESTO - IMERSÃO ELITE */}
 <section id="institucional" className="py-32 px-6 bg-white border-y border-gray-100 relative overflow-hidden">
@@ -500,13 +536,13 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
   </div>
 </section>
 
-    {/* SEÇÃO 3: ESTATÍSTICAS E HISTÓRIA - FINAL COM LOGO */}
-<section className="py-32 px-6 bg-white relative overflow-hidden">
+ {/* SEÇÃO 3: ESTATÍSTICAS E HISTÓRIA - FINAL COM LOGO (CORRIGIDA) */}
+<section className="py-20 md:py-32 px-6 bg-white relative overflow-hidden">
   
   {/* MARCA D'ÁGUA COM PARALLAX SUTIL */}
   <motion.div 
     style={{ y: useTransform(scrollYProgress, [0, 1], [0, 150]) }}
-    className="absolute left-0 top-1/2 text-[15rem] font-black text-black/[0.02] pointer-events-none select-none uppercase italic tracking-tighter z-0"
+    className="absolute left-0 top-1/2 text-[10rem] md:text-[15rem] font-black text-black/[0.02] pointer-events-none select-none uppercase italic tracking-tighter z-0"
   >
     MINAS
   </motion.div>
@@ -522,7 +558,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
           viewport={{ once: true }}
           className="text-fem-red font-bold uppercase tracking-[0.4em] text-[10px] mb-6 block"
         >
-          Desde 2025
+          Desde 2003
         </motion.span>
         
         <motion.h2 
@@ -547,13 +583,13 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-gray-600 text-lg leading-relaxed mb-12 max-w-xl border-l-4 border-fem-red pl-6 font-medium"
+          className="text-gray-600 text-lg leading-relaxed mb-12 max-w-xl border-l-4 border-fem-red pl-6 font-medium italic"
         >
           A FEM7SOC nasceu com o propósito de organizar, profissionalizar e elevar o nível da arbitragem em Minas Gerais.
         </motion.p>
 
         {/* GRID DE NÚMEROS COM ANIMAÇÃO */}
-        <div className="grid grid-cols-3 gap-8 py-10 border-t border-gray-100">
+        <div className="grid grid-cols-3 gap-4 md:gap-8 py-10 border-t border-gray-100">
           {[
             { label: 'Árbitros', value: 30, prefix: '+' },
             { label: 'Jogos / Mês', value: 100, prefix: '+' },
@@ -566,7 +602,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
               viewport={{ once: true }}
               transition={{ delay: 0.4 + (i * 0.1) }}
             >
-              <h3 className="text-4xl md:text-5xl font-black italic text-black flex items-center">
+              <h3 className="text-3xl md:text-5xl font-black italic text-black flex items-center">
                 {stat.prefix}
                 {typeof stat.value === 'number' ? (
                   <Counter value={stat.value} />
@@ -574,7 +610,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
                   stat.value
                 )}
               </h3>
-              <p className="text-gray-400 font-bold uppercase text-[9px] tracking-[0.2em] mt-2">{stat.label}</p>
+              <p className="text-gray-400 font-bold uppercase text-[8px] md:text-[9px] tracking-[0.2em] mt-2">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -585,7 +621,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
-        className="w-full lg:w-1/2 relative"
+        className="w-full lg:w-1/2 relative mt-12 lg:mt-0"
       >
         <div className="relative z-10 overflow-hidden border-r-8 border-b-8 border-fem-red rounded-xl shadow-2xl group">
           <motion.img 
@@ -593,23 +629,27 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
             transition={{ duration: 1.5 }}
             src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000&auto=format&fit=crop" 
             alt="Arbitragem" 
-            className="w-full h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
+            className="w-full h-[400px] md:h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
           />
         </div>
         
-       {/* LOGO DA FEDERAÇÃO - MAIOR, QUADRADO MENOR E VERMELHO */}
-<motion.div 
-  whileHover={{ rotate: 5, scale: 1.1 }}
-  className="absolute -bottom-8 -left-8 bg-fem-red p-3 z-20 shadow-2xl transform transition-all cursor-pointer border-2 border-white/20 flex items-center justify-center rounded-sm"
->
-  <Image 
-    src="/logo.png" 
-    alt="Logo FEM7SOC" 
-    width={85} 
-    height={85} 
-    className="object-contain"
-  />
-</motion.div>
+        {/* LOGO DA FEDERAÇÃO - CENTRALIZADO NO MOBILE / ORIGINAL NO DESKTOP */}
+        <motion.div 
+          whileHover={{ rotate: 5, scale: 1.1 }}
+          className="
+            absolute z-20 shadow-2xl transform transition-all cursor-pointer border-2 border-white/20 flex items-center justify-center rounded-sm bg-fem-red p-3
+            bottom-[-30px] left-1/2 -translate-x-1/2 
+            lg:bottom-[-20px] lg:left-[-32px] lg:translate-x-0
+          "
+        >
+          <Image 
+            src="/logo.png" 
+            alt="Logo FEM7SOC" 
+            width={75} 
+            height={75} 
+            className="object-contain lg:w-[85px] lg:h-[85px]"
+          />
+        </motion.div>
       </motion.div>
     </div>
   </div>
@@ -714,10 +754,10 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
     </motion.div>
   </div>
 </section>
-{/* FOOTER - IMPACTO TOTAL EM VERMELHO */}
+{/* FOOTER - CORES REAIS E MOBILE CENTERED */}
 <footer className="bg-fem-red pt-20 pb-10 px-6 relative overflow-hidden">
   
-  {/* MARCA D'ÁGUA SUTIL (BRANCO COM OPACIDADE BAIXA) */}
+  {/* MARCA D'ÁGUA SUTIL */}
   <div className="absolute right-0 bottom-0 text-[10rem] font-black text-white/[0.05] pointer-events-none select-none uppercase italic tracking-tighter -mb-10">
     FEM7SOC
   </div>
@@ -725,15 +765,15 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
   <div className="max-w-7xl mx-auto relative z-10">
     <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
       
-      {/* COLUNA 1: MARCA E SOBRE */}
-      <div className="md:col-span-2">
+      {/* COLUNA 1: MARCA E SOBRE - CENTRALIZADO NO MOBILE */}
+      <div className="md:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
         <Link href="/" className="flex items-center gap-3 mb-6 group">
           <Image 
             src="/logo.png" 
             alt="FEM7SOC" 
-            width={55} 
-            height={55} 
-            className="object-contain brightness-0 invert" // Deixa a logo toda branca se necessário, ou remova para manter original
+            width={65} 
+            height={65} 
+            className="object-contain" // Removido o invert para manter cores originais
           />
           <div className="flex flex-col leading-none">
               <span className="font-black italic uppercase tracking-tighter text-2xl text-white">FEM7SOC</span>
@@ -745,8 +785,8 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         </p>
       </div>
 
-      {/* COLUNA 2: LINKS RÁPIDOS */}
-      <div>
+      {/* COLUNA 2: LINKS RÁPIDOS - CENTRALIZADO NO MOBILE */}
+      <div className="flex flex-col items-center md:items-start text-center md:text-left">
         <h4 className="text-white font-black uppercase italic tracking-tighter mb-6 text-sm">Navegação</h4>
         <ul className="space-y-4 text-[10px] font-bold uppercase tracking-widest text-white/60">
           <li><Link href="/" className="hover:text-black transition-colors">Início</Link></li>
@@ -756,21 +796,31 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         </ul>
       </div>
 
-      {/* COLUNA 3: CONTATO */}
-      <div>
+      {/* COLUNA 3: CONEXÃO SOCIAL - CENTRALIZADO NO MOBILE */}
+      <div className="flex flex-col items-center md:items-start text-center md:text-left">
         <h4 className="text-white font-black uppercase italic tracking-tighter mb-6 text-sm">Conexão</h4>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center md:items-start gap-6">
            <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest leading-relaxed">
              Belo Horizonte - MG<br/>
              contato@fem7soc.com.br
            </p>
+           
+           {/* REDES SOCIAIS: INSTAGRAM E YOUTUBE */}
            <div className="flex gap-4">
-              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-white hover:bg-white hover:text-fem-red transition-all cursor-pointer shadow-sm">
-                <Activity size={16} />
-              </div>
-              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-white hover:bg-white hover:text-fem-red transition-all cursor-pointer shadow-sm">
-                <Shield size={16} />
-              </div>
+              <a 
+                href="https://instagram.com/federa_ofut7" 
+                target="_blank" 
+                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-fem-red transition-all shadow-sm"
+              >
+                <Instagram size={20} />
+              </a>
+              <a 
+                href="https://youtube.com/@federa_ofut7" 
+                target="_blank" 
+                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-fem-red transition-all shadow-sm"
+              >
+                <Youtube size={20} />
+              </a>
            </div>
         </div>
       </div>
@@ -782,7 +832,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         © 2026 Federação Mineira de Futebol 7 Society • Todos os direitos reservados
       </p>
       
-      {/* SUA ASSINATURA */}
+      {/* ASSINATURA DEVLEÃO TECH */}
       <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-all">
         <span className="text-[8px] font-black uppercase tracking-widest text-white/50">Desenvolvido por</span>
         <span className="text-[10px] font-black italic uppercase text-white">DevLeão<span className="text-black">Tech</span></span>
