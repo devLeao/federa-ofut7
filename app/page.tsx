@@ -123,16 +123,17 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
   </AnimatePresence>
 </nav>
 
-      {/* Background Decorativo - Suavizado */}
-      <div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[50%] bg-fem-red/5 blur-[120px] rounded-full" />
-      </div>
+      {/* BACKGROUND DECORATIVO SUAVIZADO */}
+<div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none z-0">
+  <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[50%] bg-fem-red/5 blur-[120px] rounded-full" />
+</div>
 
-    {/* HERO SECTION - REFINADA PARA PC E MOBILE (CORRIGIDA) */}
-<section className="relative min-h-[90vh] md:min-h-screen flex items-center px-6 md:px-20 z-10 overflow-hidden bg-white">
+{/* HERO SECTION - AJUSTE DE PROXIMIDADE NAVBAR MOBILE */}
+<section className="relative min-h-[90vh] md:min-h-screen flex items-center px-6 md:px-20 z-10 overflow-hidden bg-white -mt-[80px] pt-[50px] md:mt-0 md:pt-0">
   
-  {/* BACKGROUND LOGIC */}
+  {/* BACKGROUND LOGIC: Banner PC vs Banner Mobile */}
   <div className="absolute inset-0 z-0">
+    {/* Versão Desktop */}
     <div className="hidden md:block absolute inset-0">
       <Image 
         src="/banner.png" 
@@ -144,16 +145,23 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
       <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent" />
     </div>
 
-    {/* Mobile Background */}
-    <div className="md:hidden absolute inset-0 overflow-hidden bg-white">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-fem-red/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-gray-50 rounded-full blur-[100px]" />
+    {/* Versão Mobile (Sobe para ocupar o espaço da Navbar) */}
+    <div className="md:hidden absolute inset-0 overflow-hidden">
+      <Image 
+        src="/banner-mobile.png" 
+        alt="Banner mobile" 
+        fill 
+        className="object-cover object-center"
+        priority
+      />
+      {/* Overlay para legibilidade */}
+      <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px]" />
     </div>
   </div>
 
-  <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto relative z-10 pt-0 md:pt-0">
+  <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto relative z-10 pt-10 md:pt-0">
     
-    {/* TEXT CONTENT - Alinhamento corrigido para PC (Sem comentários internos para evitar erro de parsing) */}
+    {/* TEXT CONTENT */}
     <motion.div 
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
@@ -177,27 +185,33 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         Excelência técnica e autoridade na arbitragem mais respeitada do país.
       </p>
 
-      {/* BUTTONS SECTION */}
+  {/* BUTTONS SECTION */}
       <div className="flex flex-col gap-6 md:gap-8 items-start">
+        
+        {/* 1. Consultar Súmulas */}
         <Link href="/sumulas" className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-black hover:text-fem-red transition-all group">
           <div className="w-10 h-10 border-2 border-fem-red/10 bg-white rounded-full flex items-center justify-center group-hover:bg-fem-red group-hover:text-white transition-all shadow-sm">
             <Activity size={18} />
           </div>
-          <span className="border-b-2 border-black/5 group-hover:border-fem-red transition-all">Consultar Súmulas Oficiais</span>
+          <span className="border-b-2 border-black/5 group-hover:border-fem-red transition-all">
+            Consultar Súmulas Oficiais
+          </span>
         </Link>
 
-        <a href="#curso" className="w-full sm:w-auto">
+        {/* 2. Botão Principal do Curso */}
+        <Link href="/curso" className="w-full sm:w-auto">
           <button className="group relative bg-fem-red text-white px-10 py-5 overflow-hidden transition-all uppercase font-black tracking-widest text-xs w-full shadow-2xl shadow-fem-red/30">
-            <span className="relative z-10 flex items-center justify-center gap-3">
+            <span className="relative z-10 flex items-center justify-center gap-2">
               Curso de Árbitros <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </span>
             <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0 mix-blend-difference"></div>
           </button>
-        </a>
-      </div>
-    </motion.div>
+        </Link>
 
-    {/* LOGO - CORRIGIDA PARA PC */}
+      </div> {/* Fecha a BUTTONS SECTION */}
+    </motion.div> {/* Fecha o TEXT CONTENT */}
+
+    {/* LOGO DESKTOP */}
     <motion.div 
       initial={{ opacity: 0, scale: 0.9 }} 
       animate={{ opacity: 1, scale: 1 }} 
@@ -225,6 +239,79 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
       }
     }
   `}</style>
+</section>
+
+{/* SEÇÃO PLACA DE PUBLICIDADE - LINKS ATIVOS E LOGOS ORIGINAIS */}
+<section className="w-full bg-black py-4 overflow-hidden border-y-2 border-fem-red/30">
+  <div className="max-w-7xl mx-auto px-4">
+    
+    {/* O "GABINETE" DA PLACA */}
+    <div className="relative h-[80px] md:h-[130px] w-full flex items-center bg-black rounded-lg overflow-hidden border border-white/10 shadow-2xl">
+      
+      {/* 1. LADO ESQUERDO: Patrocinador 1 (DevLeão) */}
+      <a 
+        href="https://devleaoagencia.netlify.app/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="w-[25%] h-full flex items-center justify-center bg-white/5 border-r border-white/10 p-2 hover:bg-white/10 transition-all group"
+      >
+        <Image 
+          src="/patrocinador1.png" 
+          alt="Patrocinador 1" 
+          width={100} 
+          height={50} 
+          className="object-contain max-h-full group-hover:scale-105 transition-transform"
+        />
+      </a>
+
+      {/* 2. CENTRO: VÍDEO COM LINK WHATSAPP */}
+      <a 
+        href="https://wa.me/553188211021?text=Olá! Tenho interesse em anunciar na FEM7SOC." 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="w-[50%] h-full relative bg-black block group cursor-pointer"
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+        >
+          <source src="/patrocinadores.mp4" type="video/mp4" />
+        </video>
+        {/* Overlay de LED e indicação de clique */}
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] z-10 pointer-events-none bg-[length:100%_2px,3px_100%]" />
+      </a>
+
+      {/* 3. LADO DIREITO: Patrocinador 2 (ASSPROM) */}
+      <a 
+        href="https://assprom.org.br/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="w-[25%] h-full flex items-center justify-center bg-white/5 border-l border-white/10 p-2 hover:bg-white/10 transition-all group"
+      >
+        <Image 
+          src="/patrocinador2.png" 
+          alt="Patrocinador 2" 
+          width={100} 
+          height={50} 
+          className="object-contain max-h-full group-hover:scale-105 transition-transform"
+        />
+      </a>
+
+      {/* Brilho de Vidro Superior */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+    </div>
+
+    {/* Legenda inferior */}
+    <div className="flex justify-between mt-2 px-1">
+      <p className="text-[7px] md:text-[9px] text-white/30 uppercase font-bold tracking-widest">Painel Digital Oficial</p>
+      <p className="text-[7px] md:text-[9px] text-fem-red/50 uppercase font-black italic">Publicidade Ativa</p>
+    </div>
+
+  </div>
 </section>
 
    {/* SEÇÃO 1: MANIFESTO - IMERSÃO ELITE */}
@@ -613,7 +700,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         </div>
       </div>
 
-      {/* LADO DIREITO: IMAGEM COM MOLDURA E LOGO DA FEDERAÇÃO */}
+     {/* LADO DIREITO: IMAGEM COM MOLDURA E LOGO DA FEDERAÇÃO */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -621,16 +708,23 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         className="w-full lg:w-1/2 relative mt-12 lg:mt-0"
       >
         <div className="relative z-10 overflow-hidden border-r-8 border-b-8 border-fem-red rounded-xl shadow-2xl group">
-          <motion.img 
-            whileHover={{ scale: 1.1 }}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
             transition={{ duration: 1.5 }}
-            src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1000&auto=format&fit=crop" 
-            alt="Arbitragem" 
-            className="w-full h-[400px] md:h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
-          />
+            className="relative w-full h-[400px] md:h-[600px]"
+          >
+            <Image 
+              src="/juiz.png" 
+              alt="Arbitragem FEM7SOC" 
+              fill
+              // A mágica está no object-[center_top] ou na porcentagem personalizada abaixo
+              className="object-cover object-[center_10%] grayscale group-hover:grayscale-0 transition-all duration-1000" 
+              priority
+            />
+          </motion.div>
         </div>
         
-        {/* LOGO DA FEDERAÇÃO - CENTRALIZADO NO MOBILE / ORIGINAL NO DESKTOP */}
+        {/* LOGO DA FEDERAÇÃO */}
         <motion.div 
           whileHover={{ rotate: 5, scale: 1.1 }}
           className="
@@ -695,29 +789,30 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
     >
       <div className="grid md:grid-cols-2 gap-12 text-left relative z-10">
         
-        {/* OPÇÕES DE CONTATO VIA WHATSAPP */}
-        <div className="space-y-4">
-          {[
-            { id: 'arb', label: 'Contratar Arbitragem', msg: 'Olá! Gostaria de solicitar árbitros.' },
-            { id: 'cur', label: 'Curso de Árbitros', msg: 'Olá! Tenho interesse no curso.' },
-            { id: 'sum', label: 'Dúvida sobre Súmulas', msg: 'Olá! Preciso de ajuda com uma súmula.' }
-          ].map((opt, i) => (
-            <motion.button 
-              key={opt.id} 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ x: 10 }}
-              onClick={() => window.open(`https://wa.me/55319XXXXXXXX?text=${encodeURIComponent(opt.msg)}`, '_blank')} 
-              className="w-full p-6 bg-gray-50 border border-transparent hover:border-fem-red/30 hover:bg-white transition-all flex items-center justify-between group rounded-2xl shadow-sm hover:shadow-md"
-            >
-              <span className="font-black uppercase italic tracking-tighter text-black text-sm md:text-base">{opt.label}</span>
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-fem-red group-hover:text-white transition-all shadow-sm">
-                <ArrowRight size={18} />
-              </div>
-            </motion.button>
-          ))}
-        </div>
+       {/* OPÇÕES DE CONTATO VIA WHATSAPP - NÚMERO ATUALIZADO */}
+<div className="space-y-4">
+  {[
+    { id: 'arb', label: 'Contratar Arbitragem', msg: 'Olá! Gostaria de solicitar árbitros para minha competição.' },
+    { id: 'cur', label: 'Curso de Árbitros', msg: 'Olá! Tenho interesse em me inscrever no curso de árbitros.' },
+    { id: 'sum', label: 'Dúvida sobre Súmulas', msg: 'Olá! Preciso de ajuda com uma dúvida em uma súmula oficial.' }
+  ].map((opt, i) => (
+    <motion.button 
+      key={opt.id} 
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ delay: i * 0.1 }}
+      whileHover={{ x: 10 }}
+      // LINK ATUALIZADO COM O NÚMERO DO LUIZ: 31 8821-1021
+      onClick={() => window.open(`https://wa.me/553188211021?text=${encodeURIComponent(opt.msg)}`, '_blank')} 
+      className="w-full p-6 bg-gray-50 border border-transparent hover:border-fem-red/30 hover:bg-white transition-all flex items-center justify-between group rounded-2xl shadow-sm hover:shadow-md"
+    >
+      <span className="font-black uppercase italic tracking-tighter text-black text-sm md:text-base">{opt.label}</span>
+      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-fem-red group-hover:text-white transition-all shadow-sm">
+        <ArrowRight size={18} />
+      </div>
+    </motion.button>
+  ))}
+</div>
         
         {/* STATUS DE ATENDIMENTO DIRETO */}
         <div className="bg-gray-50 border border-gray-100 p-10 rounded-[2.5rem] flex flex-col justify-between relative overflow-hidden">

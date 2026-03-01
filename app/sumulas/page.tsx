@@ -42,7 +42,7 @@ export default function PaginaSumulas() {
   })
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white pt-32 pb-20 px-6">
+    <main className="min-h-screen bg-[#050505] text-white pt-12 pb-20 px-6">
       {/* BOTÃO VOLTAR - ADICIONE LOGO APÓS O <main> */}
 <div className="max-w-7xl mx-auto mb-8">
   <Link 

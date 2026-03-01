@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 export default function PaginaInstitucional() {
   return (
-    <main className="min-h-screen bg-white text-black pt-32 pb-20 px-6 relative">
+    <main className="min-h-screen bg-white text-black pt-12 pb-20 px-6 relative">
       
       {/* BACKGROUND DE TEXTURA - SUTIL PARA REFINAMENTO */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/white-diamond.png')] z-0" />
