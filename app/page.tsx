@@ -198,15 +198,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
           </span>
         </Link>
 
-        {/* 2. Botão Principal do Curso */}
-        <Link href="/curso" className="w-full sm:w-auto">
-          <button className="group relative bg-fem-red text-white px-10 py-5 overflow-hidden transition-all uppercase font-black tracking-widest text-xs w-full shadow-2xl shadow-fem-red/30">
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              Curso de Árbitros <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </span>
-            <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0 mix-blend-difference"></div>
-          </button>
-        </Link>
+        
 
       </div> {/* Fecha a BUTTONS SECTION */}
     </motion.div> {/* Fecha o TEXT CONTENT */}
@@ -264,7 +256,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         />
       </a>
 
-      {/* 2. CENTRO: VÍDEO COM LINK WHATSAPP */}
+      {/* 2. CENTRO: VÍDEO COM LINK WHATSAPP - AJUSTE PARA NÃO CORTAR NO MOBILE */}
       <a 
         href="https://wa.me/553188211021?text=Olá! Tenho interesse em anunciar na FEM7SOC." 
         target="_blank" 
@@ -276,15 +268,17 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
           loop
           muted
           playsInline
-          className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+          // MUDANÇA AQUI: 'object-contain' garante que o conteúdo do vídeo apareça 100% sem cortes
+          className="w-full h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
         >
           <source src="/patrocinadores.mp4" type="video/mp4" />
         </video>
+        
         {/* Overlay de LED e indicação de clique */}
         <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] z-10 pointer-events-none bg-[length:100%_2px,3px_100%]" />
       </a>
-
+      
       {/* 3. LADO DIREITO: Patrocinador 2 (ASSPROM) */}
       <a 
         href="https://assprom.org.br/" 
@@ -505,120 +499,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
   <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-black/20 blur-[120px] rounded-full pointer-events-none" />
 </section>
 
-{/* SEÇÃO 4: CURSO DE ARBITRAGEM - FOCO EM CONVERSÃO E IMERSÃO */}
-<section className="py-32 px-6 bg-gray-50/50 relative overflow-hidden">
-  
-  {/* MARCA D'ÁGUA SUTIL */}
-  <div className="absolute left-0 bottom-0 text-[12rem] font-black text-black/[0.01] pointer-events-none select-none uppercase italic tracking-tighter z-0">
-    FORMAÇÃO
-  </div>
 
-  <div className="max-w-7xl mx-auto relative z-10">
-    
-    {/* CABEÇALHO DA SEÇÃO */}
-    <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-      >
-        <span className="text-fem-red font-bold uppercase tracking-[0.3em] text-[10px] mb-4 block">Carreira Profissional</span>
-        <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter text-black">
-          Curso de <span className="text-fem-red">Arbitragem</span>
-        </h2>
-      </motion.div>
-      <motion.p 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        className="text-gray-500 max-w-sm text-xs font-bold uppercase tracking-widest leading-relaxed border-l-2 border-fem-red/30 pl-6 italic"
-      >
-        Torne-se um árbitro oficial da Federação e atue nas principais ligas de Minas Gerais com certificação de elite.
-      </motion.p>
-    </div>
-
-    <div className="grid md:grid-cols-3 gap-8">
-      {/* CARD 01: VÍDEO DE INSTRUÇÃO */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        whileHover={{ y: -10 }}
-        className="group relative bg-white border border-gray-100 rounded-[2.5rem] overflow-hidden shadow-xl shadow-gray-200/50 transition-all duration-500"
-      >
-        <div className="aspect-video bg-black relative flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 bg-fem-red/20 group-hover:bg-transparent transition-colors z-10" />
-          <div className="relative z-20 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:bg-fem-red group-hover:text-white transition-all duration-500 cursor-pointer text-fem-red">
-             <PlayCircle size={32} fill="currentColor" className="ml-1" />
-          </div>
-          {/* Fallback caso não tenha a imagem ainda */}
-          <div className="absolute inset-0 bg-gray-900/40" />
-        </div>
-        <div className="p-10">
-          <div className="flex items-center gap-2 text-fem-red mb-4">
-            <BookOpen size={16} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Módulo 01 • Gratuito</span>
-          </div>
-          <h3 className="text-xl font-black uppercase italic mb-8 text-black tracking-tight">Regras e Fundamentos do Futebol 7</h3>
-          <button className="w-full py-5 border-2 border-black/5 text-black font-black uppercase text-[10px] tracking-[0.2em] hover:bg-black hover:text-white transition-all rounded-2xl shadow-sm">
-            Assistir Aula Grátis
-          </button>
-        </div>
-      </motion.div>
-
-      {/* CARD 02: BENEFÍCIOS */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.2 }}
-        whileHover={{ y: -10 }}
-        className="bg-white border border-gray-100 p-12 rounded-[2.5rem] flex flex-col justify-between shadow-xl shadow-gray-200/50 transition-all duration-500"
-      >
-        <div className="w-16 h-16 bg-fem-red/5 rounded-2xl flex items-center justify-center text-fem-red">
-          <GraduationCap size={35} />
-        </div>
-        <div>
-          <h3 className="text-2xl font-black uppercase italic mt-8 mb-4 text-black leading-tight tracking-tighter">Certificação <br/> Oficial FEM7SOC</h3>
-          <p className="text-gray-500 text-sm leading-relaxed font-bold italic">
-            Ao concluir os 12 módulos, você recebe o certificado chancelado para apitar competições federadas em todo o estado.
-          </p>
-        </div>
-      </motion.div>
-
-      {/* CARD 03: CONVERSÃO (PÁGINA DO CURSO) */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.4 }}
-        whileHover={{ y: -10 }}
-        className="bg-fem-red p-12 rounded-[2.5rem] flex flex-col justify-between shadow-[0_30px_60px_-15px_rgba(179,19,18,0.4)] relative overflow-hidden group transition-all duration-500"
-      >
-        <div className="absolute -right-6 -top-6 text-white/10 rotate-12 group-hover:rotate-45 transition-transform duration-1000">
-          <Award size={180} />
-        </div>
-        
-        <div className="relative z-10">
-          <Award className="text-white mb-8" size={45} />
-          <h3 className="text-3xl font-black uppercase italic mb-4 text-white leading-tight tracking-tighter">Formação <br/> de Elite</h3>
-          <p className="text-white/80 text-sm leading-relaxed mb-10 font-bold italic">
-            Inscrições abertas para a turma de 2026. Garanta sua vaga e receba o kit oficial de arbitragem.
-          </p>
-        </div>
-
-        <Link href="/curso" className="relative z-10">
-          <motion.button 
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full bg-black text-white py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] shadow-2xl hover:bg-white hover:text-fem-red transition-all"
-          >
-            Saiba Mais
-          </motion.button>
-        </Link>
-      </motion.div>
-    </div>
-  </div>
-</section>
 
  {/* SEÇÃO 3: ESTATÍSTICAS E HISTÓRIA - FINAL COM LOGO (CORRIGIDA) */}
 <section className="py-20 md:py-32 px-6 bg-white relative overflow-hidden">
@@ -865,7 +746,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
             alt="FEM7SOC" 
             width={65} 
             height={65} 
-            className="object-contain" // Removido o invert para manter cores originais
+            className="object-contain"
           />
           <div className="flex flex-col leading-none">
               <span className="font-black italic uppercase tracking-tighter text-2xl text-white">FEM7SOC</span>
@@ -873,7 +754,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
           </div>
         </Link>
         <p className="text-white/70 text-xs font-medium leading-relaxed max-w-sm italic">
-          A entidade máxima do Futebol 7 Society em Minas Gerais. Desde 2003, promovendo a excelência técnica, ética e o profissionalismo em campo.
+          A entidade máxima do Futebol 7 Society em Minas Gerais. Desde 2008, promovendo a excelência técnica, ética e o profissionalismo em campo.
         </p>
       </div>
 
@@ -897,11 +778,11 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
              contato@fem7soc.com.br
            </p>
            
-           {/* REDES SOCIAIS: INSTAGRAM E YOUTUBE */}
            <div className="flex gap-4">
               <a 
-                href="https://instagram.com/federa_ofut7" 
+                href="https://www.instagram.com/fem7soc/" 
                 target="_blank" 
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-fem-red transition-all shadow-sm"
               >
                 <Instagram size={20} />
@@ -909,6 +790,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
               <a 
                 href="https://youtube.com/@federa_ofut7" 
                 target="_blank" 
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-fem-red transition-all shadow-sm"
               >
                 <Youtube size={20} />
@@ -918,17 +800,26 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
       </div>
     </div>
 
-    {/* LINHA FINAL: COPYRIGHT E ASSINATURA */}
-    <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+    {/* LINHA FINAL: COPYRIGHT E ASSINATURA CENTRALIZADOS NO MOBILE */}
+    <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
       <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.3em] text-center md:text-left">
         © 2026 Federação Mineira de Futebol 7 Society • Todos os direitos reservados
       </p>
       
-      {/* ASSINATURA DEVLEÃO TECH */}
-      <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-all">
-        <span className="text-[8px] font-black uppercase tracking-widest text-white/50">Desenvolvido por</span>
-        <span className="text-[10px] font-black italic uppercase text-white">DevLeão<span className="text-black">Tech</span></span>
-      </div>
+      {/* ASSINATURA DEVLEÃO AGENCY - AJUSTADA PARA O FUNDO VERMELHO */}
+      <a 
+        href="https://devleaoagencia.netlify.app/" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="flex flex-col md:flex-row items-center gap-2 opacity-80 hover:opacity-100 transition-all group cursor-pointer text-center"
+      >
+        <span className="text-[8px] font-black uppercase tracking-widest text-white/50">
+          Desenvolvido por
+        </span>
+        <span className="text-[11px] font-black italic uppercase text-white tracking-tighter">
+          DevLeão <span className="text-black group-hover:text-white transition-colors">Agency</span>
+        </span>
+      </a>
     </div>
   </div>
 </footer>
