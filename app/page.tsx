@@ -198,8 +198,6 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
           </span>
         </Link>
 
-        
-
       </div> {/* Fecha a BUTTONS SECTION */}
     </motion.div> {/* Fecha o TEXT CONTENT */}
 
@@ -764,7 +762,7 @@ const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
         <ul className="space-y-4 text-[10px] font-bold uppercase tracking-widest text-white/60">
           <li><Link href="/" className="hover:text-black transition-colors">Início</Link></li>
           <li><Link href="/institucional" className="hover:text-black transition-colors">Institucional</Link></li>
-          <li><Link href="/curso" className="hover:text-black transition-colors">Academia de Oficiais</Link></li>
+    
           <li><Link href="/sumulas" className="hover:text-black transition-colors">Central de Súmulas</Link></li>
         </ul>
       </div>
