@@ -1,23 +1,21 @@
 'use client'
-import { 
-  Instagram, 
-  Youtube,} from 'lucide-react'
-import { useState, useRef } from 'react'
+
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { 
   Menu, X, ArrowRight, Activity, CheckCircle2, 
   GraduationCap, Shield, MapPin, Trophy, 
-  PlayCircle, BookOpen, Award, Radio 
+  PlayCircle, BookOpen, Award, Radio,
+  Instagram, Youtube 
 } from 'lucide-react'
-import ThemeToggle from '@/components/ThemeToggle'
+import { useLenis } from '@studio-freight/react-lenis'
 
+// Componente de Contador Animado
 function Counter({ value }: { value: number }) {
   const [count, setCount] = useState(0);
-  const nodeRef = useRef(null);
   
-  // Lógica simples para contar quando aparecer na tela
   return (
     <motion.span
       initial={{ opacity: 0 }}
@@ -44,84 +42,144 @@ function Counter({ value }: { value: number }) {
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const containerRef = useRef(null);
-const { scrollYProgress } = useScroll({
-  target: containerRef,
-  offset: ["start end", "end start"]
-});
-const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const lenis = useLenis()
 
- return (
-    <main className="min-h-screen bg-white text-black pt-24 md:pt-8 transition-colors duration-300">
-      
-    {/* NAVBAR FIXA - VERMELHA COM LOGO ORIGINAL */}
-<nav className="fixed top-0 w-full z-[100] bg-fem-red backdrop-blur-xl border-b border-white/10 px-6 py-4 shadow-lg">
-  <div className="max-w-7xl mx-auto flex justify-between items-center">
-    
-    {/* LOGO - IDENTIDADE PRESERVADA */}
-    <Link href="/" className="flex items-center gap-3 group">
-      <Image 
-        src="/logo.png" 
-        alt="FEM7SOC" 
-        width={40} 
-        height={40} 
-        className="object-contain transition-transform group-hover:scale-105" 
-      />
-      <div className="flex flex-col leading-none">
-          <span className="font-black italic uppercase tracking-tighter text-xl text-white">FEM7SOC</span>
-          <span className="text-[7px] uppercase tracking-[0.3em] text-white/80 font-bold">Federação Mineira</span>
-      </div>
-    </Link>
-    
-    {/* MENU DESKTOP - AGORA APONTANDO PARA A PÁGINA DE LEGADO */}
-    <div className="hidden md:flex items-center gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-white/90">
-      <Link href="/" className="hover:text-black transition-colors">Início</Link>
-      
-      {/* ALTERADO: De <a> para <Link> para navegar entre páginas */}
-      <Link href="/institucional" className="hover:text-black transition-colors">
-        Institucional
-      </Link>
-      
-      <Link href="/area-do-arbitro" className="hover:text-black transition-colors text-white">Área do Árbitro</Link>
-      
-      <Link href="/sumulas">
-        <button className="bg-white text-fem-red px-6 py-2 hover:bg-black hover:text-white transition-all font-black uppercase tracking-widest text-[10px] rounded-sm shadow-xl">
-          Súmulas
-        </button>
-      </Link>
-    </div>
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
-    {/* CONTROLES MOBILE */}
-    <div className="flex items-center gap-4 md:hidden">
-      <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-white hover:bg-white/10 rounded-full transition-colors">
-        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-    </div>
-  </div>
+  // Função para gerenciar o clique no Início/Logo
+  const handleHomeClick = () => {
+    setIsMenuOpen(false)
+    if (lenis) {
+      // Força o scroll suave para o topo através do Lenis
+      lenis.scrollTo(0, { duration: 1.5 })
+    } else {
+      // Fallback caso o lenis não tenha carregado
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
 
-  {/* MENU MOBILE EXPANDIDO - TAMBÉM ATUALIZADO */}
-  <AnimatePresence>
-    {isMenuOpen && (
-      <motion.div 
-        initial={{ opacity: 0, height: 0 }} 
-        animate={{ opacity: 1, height: 'auto' }} 
-        exit={{ opacity: 0, height: 0 }} 
-        className="absolute top-full left-0 w-full bg-fem-red border-b border-white/10 overflow-hidden md:hidden shadow-2xl"
-      >
-        <div className="flex flex-col p-8 gap-6 text-white">
-          <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase italic hover:text-black transition-colors">Início</Link>
+  return (
+    <main ref={containerRef} className="min-h-screen bg-white text-black pt-24 md:pt-8 transition-colors duration-300">
+      
+      {/* NAVBAR FIXA - VERMELHA COM LOGO ORIGINAL */}
+      <nav className="fixed top-0 w-full z-[100] bg-fem-red backdrop-blur-xl border-b border-white/10 px-6 py-4 shadow-lg">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
           
-          {/* MOBILE: Link para a nova página */}
-          <Link href="/institucional" onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase italic hover:text-black transition-colors">
-            Institucional
+          {/* LOGO - IDENTIDADE PRESERVADA */}
+          <Link 
+            href="/" 
+            className="flex items-center gap-3 group"
+            onClick={(e) => {
+              e.preventDefault(); // Evita o reload se já estiver na home
+              handleHomeClick();
+            }}
+          >
+            <Image 
+              src="/logo.png" 
+              alt="FEM7SOC" 
+              width={40} 
+              height={40} 
+              className="object-contain transition-transform group-hover:scale-105" 
+            />
+            <div className="flex flex-col leading-none">
+                <span className="font-black italic uppercase tracking-tighter text-xl text-white">FEM7SOC</span>
+                <span className="text-[7px] uppercase tracking-[0.3em] text-white/80 font-bold">Federação Mineira</span>
+            </div>
           </Link>
           
-          <Link href="/area-do-arbitro" onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase italic hover:text-black transition-colors">Área do Árbitro</Link>
-          <Link href="/sumulas" onClick={() => setIsMenuOpen(false)} className="text-2xl font-black uppercase italic text-black underline underline-offset-8">Súmulas</Link>
+          {/* MENU DESKTOP */}
+          <div className="hidden md:flex items-center gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-white/90">
+            <Link 
+              href="/" 
+              onClick={(e) => {
+                e.preventDefault();
+                handleHomeClick();
+              }}
+              className="hover:text-black transition-colors"
+            >
+              Início
+            </Link>
+            
+            <Link href="/institucional" className="hover:text-black transition-colors">
+              Institucional
+            </Link>
+            
+            <Link href="/area-do-arbitro" className="hover:text-black transition-colors text-white">
+              Área do Árbitro
+            </Link>
+            
+            <Link href="/sumulas">
+              <button className="bg-white text-fem-red px-6 py-2 hover:bg-black hover:text-white transition-all font-black uppercase tracking-widest text-[10px] rounded-sm shadow-xl">
+                Súmulas
+              </button>
+            </Link>
+          </div>
+
+          {/* CONTROLES MOBILE */}
+          <div className="flex items-center gap-4 md:hidden">
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)} 
+              className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-</nav>
+
+        {/* MENU MOBILE EXPANDIDO */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }} 
+              animate={{ opacity: 1, height: 'auto' }} 
+              exit={{ opacity: 0, height: 0 }} 
+              className="absolute top-full left-0 w-full bg-fem-red border-b border-white/10 overflow-hidden md:hidden shadow-2xl"
+            >
+              <div className="flex flex-col p-8 gap-6 text-white">
+                <Link 
+                  href="/" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleHomeClick();
+                  }} 
+                  className="text-2xl font-black uppercase italic hover:text-black transition-colors"
+                >
+                  Início
+                </Link>
+                
+                <Link 
+                  href="/institucional" 
+                  onClick={() => setIsMenuOpen(false)} 
+                  className="text-2xl font-black uppercase italic hover:text-black transition-colors"
+                >
+                  Institucional
+                </Link>
+                
+                <Link 
+                  href="/area-do-arbitro" 
+                  onClick={() => setIsMenuOpen(false)} 
+                  className="text-2xl font-black uppercase italic hover:text-black transition-colors"
+                >
+                  Área do Árbitro
+                </Link>
+                
+                <Link 
+                  href="/sumulas" 
+                  onClick={() => setIsMenuOpen(false)} 
+                  className="text-2xl font-black uppercase italic text-black underline underline-offset-8"
+                >
+                  Súmulas
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
 
       {/* BACKGROUND DECORATIVO SUAVIZADO */}
 <div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none z-0">
