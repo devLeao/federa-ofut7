@@ -1,8 +1,20 @@
 'use client'
 import { ReactLenis } from '@studio-freight/react-lenis'
+import { ReactNode, useEffect, useState } from 'react'
 
-// Forçando a tipagem para aceitar qualquer conteúdo e sumir o erro de vez
 export default function SmoothScroll({ children }: { children: any }) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // No build da Vercel (Server Side), ele renderiza apenas o conteúdo puro
+  // No navegador, ele ativa o scroll suave
+  if (!mounted) {
+    return <>{children}</>
+  }
+
   return (
     <ReactLenis 
       root 
