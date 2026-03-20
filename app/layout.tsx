@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-// 1. Importe o ThemeProvider que acabamos de criar
 import { ThemeProvider } from '@/components/ThemeProvider' 
+// Importando o SmoothScroll da pasta de components conforme sua estrutura
+import SmoothScroll from '@/components/SmoothScroll' 
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +17,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-return (
+  return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider
@@ -25,7 +26,10 @@ return (
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          {/* O SmoothScroll envolve o children para aplicar o efeito em todas as páginas */}
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>
