@@ -335,9 +335,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] z-10 pointer-events-none bg-[length:100%_2px,3px_100%]" />
       </a>
       
-      {/* 3. LADO DIREITO: Patrocinador 2 (ASSPROM) */}
+      {/* 3. LADO DIREITO: Patrocinador 2 (Liga 13) */}
       <a 
-        href="https://assprom.org.br/" 
+        href="https://liga13.vercel.app/" 
         target="_blank" 
         rel="noopener noreferrer"
         className="w-[25%] h-full flex items-center justify-center bg-white/5 border-l border-white/10 p-2 hover:bg-white/10 transition-all group"

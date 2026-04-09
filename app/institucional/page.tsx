@@ -112,7 +112,7 @@ export default function PaginaInstitucional() {
           
           <div className="relative z-10">
             <div className="mb-16 border-l-4 border-white/30 pl-8">
-              <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-4 text-white">Conselho Executivo</h2>
+              <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-4 text-white">Diretoria Executiva</h2>
               <p className="text-white/70 font-bold uppercase tracking-widest text-[10px]">Administração Oficial • Ata de Assembleia Geral 2025</p>
             </div>
 
@@ -129,7 +129,7 @@ export default function PaginaInstitucional() {
               <div className="grid grid-cols-1 gap-8">
                 <div className="border-l-4 border-white/30 pl-6">
                   <h4 className="text-xs font-black uppercase tracking-widest mb-1 text-white/70">Diretoria Administrativa</h4>
-                  <p className="text-xl font-black uppercase italic text-white">Roberto Andrade Clemente Diniz</p>
+                  <p className="text-xl font-black uppercase italic text-white">Roberto Andrade Nunes</p>
                 </div>
                 <div className="border-l-4 border-white/30 pl-6">
                   <h4 className="text-xs font-black uppercase tracking-widest mb-1 text-white/70">Diretoria Financeira</h4>
@@ -144,8 +144,8 @@ export default function PaginaInstitucional() {
 
             <div className="flex flex-wrap gap-8 opacity-60">
                 <p className="text-[9px] font-black uppercase tracking-widest">Conselho Fiscal: Wladiney Silva Junior</p>
-                <p className="text-[9px] font-black uppercase tracking-widest">Conselho Fiscal: Arceli Chaves</p>
-                <p className="text-[9px] font-black uppercase tracking-widest">Conselho Fiscal: Rodrigo Moreira</p>
+                <p className="text-[9px] font-black uppercase tracking-widest">Suplente: Arceli Chaves</p>
+                <p className="text-[9px] font-black uppercase tracking-widest">Suplente: Rodrigo Moreira</p>
             </div>
           </div>
         </section>
