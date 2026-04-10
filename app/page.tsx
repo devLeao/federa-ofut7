@@ -579,7 +579,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="text-fem-red font-bold uppercase tracking-[0.4em] text-[10px] mb-6 block"
         >
-          Desde 2003
+          Desde 2008
         </motion.span>
         
         <motion.h2 
