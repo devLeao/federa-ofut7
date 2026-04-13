@@ -145,8 +145,8 @@ export default function PaginaInstitucional() {
             <div className="flex flex-wrap gap-8 opacity-60">
                 <p className="text-[9px] font-black uppercase tracking-widest">Conselho Fiscal: WLADINEY CERBINO FERREIRA</p>
                 <p className="text-[9px] font-black uppercase tracking-widest">Conselho Fiscal: RODRIGO MOREIRA ABRANTES</p>
-                <p className="text-[9px] font-black uppercase tracking-widest">Conselho Fiscal: WLADINEY CERBINO FERREIRA</p>
-                <p className="text-[9px] font-black uppercase tracking-widest">Suplente: ELIAS CASSIA CASSIANO DA SILVA JUNIOR.</p>
+                <p className="text-[9px] font-black uppercase tracking-widest">Conselho Fiscal: ELIAS CASSIA CASSIANO DA SILVA JUNIOR.</p>
+                <p className="text-[9px] font-black uppercase tracking-widest">Suplente: ARCELI CHAVES.</p>
                 <p className="text-[9px] font-black uppercase tracking-widest">Suplente: RAPHAEL VASCONCELOS BANDEIRA GONÇALVES.</p>
                 <p className="text-[9px] font-black uppercase tracking-widest">Suplente: THOMPSON AZEVEDO MOREIRA.</p>
 
