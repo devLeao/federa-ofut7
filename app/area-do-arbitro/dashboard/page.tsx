@@ -1,7 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { Camera, LogOut, Loader2, ArrowLeft, LayoutDashboard, History, CheckCircle2 } from 'lucide-react'
+import { getPerfilLogado, Perfil } from '@/lib/perfil'
+import { Camera, LogOut, Loader2, ArrowLeft, LayoutDashboard, History, CheckCircle2, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -10,7 +11,16 @@ export default function DashboardArbitro() {
   const [campeonato, setCampeonato] = useState('')
   const [confronto, setConfronto] = useState('')
   const [file, setFile] = useState<File | null>(null)
+  const [perfil, setPerfil] = useState<Perfil | null>(null)
   const router = useRouter()
+
+  // Sem login (ou sem perfil ativo) volta para a tela de acesso
+  useEffect(() => {
+    getPerfilLogado().then((p) => {
+      if (!p) router.replace('/area-do-arbitro')
+      else setPerfil(p)
+    })
+  }, [router])
 
   // Função para deslogar
   async function handleSignOut() {
@@ -23,10 +33,11 @@ export default function DashboardArbitro() {
     if (!file || !campeonato || !confronto) return alert("Preencha todos os campos!")
     setLoading(true)
     try {
-      const fileName = `${Date.now()}-${file.name}`
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+      const fileName = `${perfil!.id}/${Date.now()}.${ext}`
+      const { error: uploadError } = await supabase.storage
         .from('sumulas')
-        .upload(fileName, file)
+        .upload(fileName, file, { contentType: file.type })
       if (uploadError) throw uploadError
 
       const { data: { publicUrl } } = supabase.storage.from('sumulas').getPublicUrl(fileName)
@@ -38,22 +49,30 @@ export default function DashboardArbitro() {
 
       alert("Súmula enviada com sucesso para a FEM7SOC!")
       setFile(null); setCampeonato(''); setConfronto('')
-    } catch (error: any) {
-      alert("Erro no processo: " + error.message)
+    } catch (error) {
+      alert("Erro no processo: " + (error as Error).message)
     } finally {
       setLoading(false)
     }
   }
 
+  if (!perfil) {
+    return (
+      <main className="min-h-screen bg-[#050505] flex items-center justify-center">
+        <Loader2 className="animate-spin text-fem-red" size={40} />
+      </main>
+    )
+  }
+
   return (
     <main className="min-h-screen bg-[#050505] text-white pt-32 px-6 pb-20">
       <div className="max-w-6xl mx-auto">
-        
+
         {/* BARRA SUPERIOR DE NAVEGAÇÃO */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div className="flex flex-col gap-4">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="inline-flex items-center gap-2 text-gray-500 hover:text-fem-red transition-all group"
             >
               <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-fem-red transition-colors">
@@ -61,25 +80,36 @@ export default function DashboardArbitro() {
               </div>
               <span className="text-[10px] font-black uppercase tracking-[0.3em]">Voltar ao Início</span>
             </Link>
-            
+
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-fem-red rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(179,19,18,0.3)]">
                 <LayoutDashboard size={24} className="text-white" />
               </div>
               <div>
                 <h1 className="text-3xl font-black uppercase italic tracking-tighter leading-none">Painel do <span className="text-fem-red">Árbitro</span></h1>
-                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em] mt-1">Gestão de Súmulas Oficiais</p>
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em] mt-1">{perfil.nome} · Gestão de Súmulas Oficiais</p>
               </div>
             </div>
           </div>
 
-          <button 
-            onClick={handleSignOut}
-            className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-red-500/10 hover:border-red-500/50 transition-all text-gray-400 hover:text-red-500"
-          >
-            <span className="text-[10px] font-black uppercase tracking-widest">Encerrar Sessão</span>
-            <LogOut size={16} />
-          </button>
+          <div className="flex flex-wrap gap-3">
+            {perfil.role === 'admin' && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:border-fem-red transition-all text-gray-400 hover:text-white"
+              >
+                <span className="text-[10px] font-black uppercase tracking-widest">Painel Admin</span>
+                <ShieldCheck size={16} />
+              </Link>
+            )}
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-red-500/10 hover:border-red-500/50 transition-all text-gray-400 hover:text-red-500"
+            >
+              <span className="text-[10px] font-black uppercase tracking-widest">Encerrar Sessão</span>
+              <LogOut size={16} />
+            </button>
+          </div>
         </div>
 
         {/* CONTEÚDO PRINCIPAL */}
@@ -89,27 +119,27 @@ export default function DashboardArbitro() {
               <Camera className="text-fem-red" size={20} />
               <h2 className="text-sm font-black uppercase tracking-[0.2em]">Enviar Nova Súmula</h2>
             </div>
-            
+
             <form onSubmit={handleUpload} className="bg-[#0A0A0A] border border-white/5 p-8 md:p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
               <div className="grid md:grid-cols-2 gap-8 mb-8">
                 <div className="flex flex-col gap-2">
                   <label className="text-[10px] uppercase font-black text-gray-500 tracking-widest ml-1">Campeonato</label>
-                  <input 
+                  <input
                     value={campeonato}
                     onChange={(e) => setCampeonato(e.target.value)}
-                    type="text" 
-                    placeholder="Ex: Copa Norte" 
-                    className="w-full bg-white/[0.03] border border-white/10 p-5 rounded-2xl focus:border-fem-red outline-none transition-all text-sm font-bold uppercase tracking-wider" 
+                    type="text"
+                    placeholder="Ex: Copa Norte"
+                    className="w-full bg-white/[0.03] border border-white/10 p-5 rounded-2xl focus:border-fem-red outline-none transition-all text-sm font-bold uppercase tracking-wider"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-[10px] uppercase font-black text-gray-500 tracking-widest ml-1">Confronto</label>
-                  <input 
+                  <input
                     value={confronto}
                     onChange={(e) => setConfronto(e.target.value)}
-                    type="text" 
-                    placeholder="Time A x Time B" 
-                    className="w-full bg-white/[0.03] border border-white/10 p-5 rounded-2xl focus:border-fem-red outline-none transition-all text-sm font-bold uppercase tracking-wider" 
+                    type="text"
+                    placeholder="Time A x Time B"
+                    className="w-full bg-white/[0.03] border border-white/10 p-5 rounded-2xl focus:border-fem-red outline-none transition-all text-sm font-bold uppercase tracking-wider"
                   />
                 </div>
               </div>
@@ -121,16 +151,16 @@ export default function DashboardArbitro() {
                 <h4 className="text-xl font-black uppercase italic text-white mb-2">
                   {file ? file.name : "Fotografar Súmula"}
                 </h4>
-                <p className="text-gray-600 text-[10px] font-bold uppercase tracking-widest">JPG, PNG ou PDF (Máx. 5MB)</p>
-                <input 
-                  type="file" 
-                  accept="image/*"
+                <p className="text-gray-600 text-[10px] font-bold uppercase tracking-widest">JPG, PNG ou WEBP (Máx. 10MB)</p>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  className="absolute inset-0 opacity-0 cursor-pointer" 
+                  className="absolute inset-0 opacity-0 cursor-pointer"
                 />
               </div>
 
-              <button 
+              <button
                 disabled={loading}
                 type="submit"
                 className="w-full mt-10 py-6 bg-fem-red text-white font-black uppercase tracking-[0.2em] hover:bg-red-700 transition-all rounded-2xl shadow-xl shadow-fem-red/20 text-[11px] flex items-center justify-center gap-4 group"
@@ -141,7 +171,7 @@ export default function DashboardArbitro() {
               </button>
             </form>
           </div>
-          
+
           {/* BARRA LATERAL (Informativo ou Histórico) */}
           <div className="space-y-6">
             <div className="flex items-center gap-3">

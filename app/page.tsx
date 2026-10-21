@@ -112,7 +112,11 @@ export default function Home() {
             <Link href="/area-do-arbitro" className="hover:text-black transition-colors text-white">
               Área do Árbitro
             </Link>
-            
+
+            <Link href="/atletas" className="hover:text-black transition-colors">
+              Atletas
+            </Link>
+
             <Link href="/sumulas">
               <button className="bg-white text-fem-red px-6 py-2 hover:bg-black hover:text-white transition-all font-black uppercase tracking-widest text-[10px] rounded-sm shadow-xl">
                 Súmulas
@@ -167,7 +171,15 @@ export default function Home() {
                 >
                   Área do Árbitro
                 </Link>
-                
+
+                <Link
+                  href="/atletas"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-2xl font-black uppercase italic hover:text-black transition-colors"
+                >
+                  Atletas
+                </Link>
+
                 <Link 
                   href="/sumulas" 
                   onClick={() => setIsMenuOpen(false)} 
@@ -820,7 +832,9 @@ export default function Home() {
         <ul className="space-y-4 text-[10px] font-bold uppercase tracking-widest text-white/60">
           <li><Link href="/" className="hover:text-black transition-colors">Início</Link></li>
           <li><Link href="/institucional" className="hover:text-black transition-colors">Institucional</Link></li>
-    
+          <li><Link href="/cadastro-atleta" className="hover:text-black transition-colors">Cadastro de Atleta</Link></li>
+          <li><Link href="/atletas" className="hover:text-black transition-colors">Atletas Inscritos</Link></li>
+
           <li><Link href="/sumulas" className="hover:text-black transition-colors">Central de Súmulas</Link></li>
         </ul>
       </div>

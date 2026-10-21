@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Shield, Lock, ArrowRight, User, ArrowLeft, Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { getPerfilLogado } from '@/lib/perfil'
 
 export default function LoginArbitro() {
   const [email, setEmail] = useState('')
@@ -25,10 +26,16 @@ export default function LoginArbitro() {
       })
 
       if (error) {
-        alert("Erro no acesso: " + error.message)
+        alert("E-mail ou senha incorretos.")
       } else if (data.user) {
-        // ALINHAMENTO: Se o árbitro logar, ele vai para o Dashboard enviar súmulas
-        router.push('/area-do-arbitro/dashboard')
+        // Só entra quem tem perfil ativo criado pela federação
+        const perfil = await getPerfilLogado()
+        if (!perfil) {
+          await supabase.auth.signOut()
+          alert("Acesso não autorizado ou desativado. Contate a federação.")
+        } else {
+          router.push(perfil.role === 'admin' ? '/admin' : '/area-do-arbitro/dashboard')
+        }
       }
     } catch (err) {
       alert("Ocorreu um erro inesperado.")
