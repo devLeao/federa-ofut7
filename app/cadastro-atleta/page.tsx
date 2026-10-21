@@ -3,11 +3,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { AtletaCarteirinha, formatCpf, formatRegistro, isValidCpf, onlyDigits } from '@/lib/atletas'
-import Carteirinha from '@/components/Carteirinha'
+import Carteirinha, { gerarPdfCarteirinha } from '@/components/Carteirinha'
 import SiteNav from '@/components/SiteNav'
 import SiteFooter from '@/components/SiteFooter'
 import PageHero from '@/components/PageHero'
-import { Camera, CheckCircle2, Download, IdCard, Loader2, RotateCcw, Users, AlertTriangle } from 'lucide-react'
+import { Camera, CheckCircle2, Download, IdCard, Loader2, RotateCcw, Users, AlertTriangle, Printer } from 'lucide-react'
 
 const MAX_FOTO = 5 * 1024 * 1024
 const labelClass = 'text-[10px] uppercase font-black text-gray-500 tracking-widest ml-1'
@@ -30,6 +30,8 @@ export default function CadastroAtleta() {
   const [registro, setRegistro] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
+  const [lado, setLado] = useState<'frente' | 'verso'>('frente')
+  const [gerandoPdf, setGerandoPdf] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   // yyyy-mm-dd no fuso local
@@ -102,6 +104,17 @@ export default function CadastroAtleta() {
       )
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handlePdf() {
+    setGerandoPdf(true)
+    try {
+      await gerarPdfCarteirinha(atleta, fotoPreview)
+    } catch (error) {
+      setErro('Erro ao gerar o PDF: ' + (error as Error).message)
+    } finally {
+      setGerandoPdf(false)
     }
   }
 
@@ -210,8 +223,12 @@ export default function CadastroAtleta() {
                 <div className="flex items-center gap-3 text-green-700 bg-green-50 border border-green-200 rounded-2xl p-4 text-sm font-bold">
                   <CheckCircle2 size={18} /> Cadastro concluído! Registro nº {formatRegistro(registro)}
                 </div>
-                <button type="button" onClick={handleDownload} className="w-full py-5 bg-fem-red text-white font-black uppercase tracking-[0.2em] hover:bg-black transition-all rounded-2xl shadow-xl shadow-fem-red/20 text-[11px] flex items-center justify-center gap-3">
-                  Baixar carteirinha <Download size={18} />
+                <button type="button" onClick={handlePdf} disabled={gerandoPdf} className="w-full py-5 bg-fem-red text-white font-black uppercase tracking-[0.2em] hover:bg-black transition-all rounded-2xl shadow-xl shadow-fem-red/20 text-[11px] flex items-center justify-center gap-3 disabled:opacity-60">
+                  {gerandoPdf ? <Loader2 className="animate-spin" size={18} /> : <>Baixar PDF para impressão <Printer size={18} /></>}
+                </button>
+                <p className="text-[11px] text-gray-500 text-center -mt-1">Frente e verso no tamanho real do cartão (85,6 × 54 mm), pronto para a gráfica.</p>
+                <button type="button" onClick={handleDownload} className="w-full py-4 bg-black text-white hover:bg-fem-red font-black uppercase tracking-[0.2em] transition-all rounded-2xl text-[10px] flex items-center justify-center gap-3">
+                  <Download size={14} /> Baixar imagem da frente (PNG)
                 </button>
                 <button type="button" onClick={novoCadastro} className="w-full py-4 bg-[#F4F4F5] text-gray-600 hover:text-black font-black uppercase tracking-[0.2em] transition-all rounded-2xl text-[10px] flex items-center justify-center gap-3">
                   <RotateCcw size={14} /> Novo cadastro
@@ -238,9 +255,25 @@ export default function CadastroAtleta() {
                   <IdCard className="text-fem-red" size={20} />
                   <h2 className="text-sm font-black uppercase tracking-[0.2em]">{concluido ? 'Sua carteirinha' : 'Pré-visualização'}</h2>
                 </div>
-                {!concluido && <span className="text-[9px] font-black uppercase tracking-widest text-white/30">Atualiza ao digitar</span>}
+                <div className="flex bg-white/5 border border-white/10 rounded-full p-1">
+                  {(['frente', 'verso'] as const).map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => setLado(l)}
+                      className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-colors ${lado === l ? 'bg-fem-red text-white' : 'text-white/50 hover:text-white'}`}
+                    >
+                      {l}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <Carteirinha atleta={atleta} fotoUrl={fotoPreview} canvasRef={canvasRef} />
+              {/* A frente fica sempre montada: o PNG é gerado a partir dela */}
+              <div className={lado === 'frente' ? '' : 'hidden'}>
+                <Carteirinha atleta={atleta} fotoUrl={fotoPreview} canvasRef={canvasRef} />
+              </div>
+              {lado === 'verso' && <Carteirinha atleta={atleta} fotoUrl={null} lado="verso" />}
+              {!concluido && <p className="text-[9px] font-black uppercase tracking-widest text-white/30 mt-4">Atualiza enquanto você digita</p>}
             </div>
 
             <ol className="bg-white border border-black/5 rounded-3xl p-6 md:p-8 space-y-4">

@@ -69,7 +69,42 @@ function drawField(
   }
 }
 
-export async function drawCarteirinha(canvas: HTMLCanvasElement, atleta: AtletaCarteirinha, fotoUrl: string | null) {
+// Quebra o texto em linhas que caibam na largura
+function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
+  const linhas: string[] = []
+  let atual = ''
+  for (const palavra of text.split(' ')) {
+    const teste = atual ? `${atual} ${palavra}` : palavra
+    if (ctx.measureText(teste).width > maxWidth && atual) {
+      linhas.push(atual)
+      atual = palavra
+    } else {
+      atual = teste
+    }
+  }
+  if (atual) linhas.push(atual)
+  return linhas
+}
+
+// Fundo do cartão. Cantos arredondados só na tela: para impressão a
+// arte vai reta e a gráfica corta o PVC.
+function prepararFundo(ctx: CanvasRenderingContext2D, arredondado: boolean) {
+  ctx.clearRect(0, 0, CARD_W, CARD_H)
+  ctx.save()
+  if (arredondado) {
+    roundRect(ctx, 0, 0, CARD_W, CARD_H, 44)
+    ctx.clip()
+  }
+  ctx.fillStyle = '#fbfbfb'
+  ctx.fillRect(0, 0, CARD_W, CARD_H)
+}
+
+export async function drawCarteirinha(
+  canvas: HTMLCanvasElement,
+  atleta: AtletaCarteirinha,
+  fotoUrl: string | null,
+  arredondado = true,
+) {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
@@ -79,14 +114,7 @@ export async function drawCarteirinha(canvas: HTMLCanvasElement, atleta: AtletaC
     fotoUrl ? loadImage(fotoUrl).catch(() => null) : Promise.resolve(null),
   ])
 
-  ctx.clearRect(0, 0, CARD_W, CARD_H)
-  ctx.save()
-
-  // Fundo do cartão
-  roundRect(ctx, 0, 0, CARD_W, CARD_H, 44)
-  ctx.clip()
-  ctx.fillStyle = '#fbfbfb'
-  ctx.fillRect(0, 0, CARD_W, CARD_H)
+  prepararFundo(ctx, arredondado)
 
   // Marca d'água central
   ctx.globalAlpha = 0.07
@@ -165,19 +193,126 @@ export async function drawCarteirinha(canvas: HTMLCanvasElement, atleta: AtletaC
   ctx.restore()
 }
 
+export async function drawVerso(canvas: HTMLCanvasElement, atleta: AtletaCarteirinha, arredondado = true) {
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+
+  const family = getComputedStyle(document.body).fontFamily || 'sans-serif'
+  const logo = await loadImage('/logo.png')
+
+  prepararFundo(ctx, arredondado)
+
+  // Marca d'água
+  ctx.globalAlpha = 0.06
+  ctx.drawImage(logo, 390, 150, 420, 420)
+  ctx.globalAlpha = 1
+
+  // Faixa superior
+  ctx.fillStyle = RED
+  ctx.fillRect(0, 0, CARD_W, 100)
+  ctx.fillStyle = '#ffffff'
+  ctx.font = `800 38px ${family}`
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText('FEDERAÇÃO MINEIRA DE FUTEBOL 7 SOCIETY', CARD_W / 2, 52)
+
+  // Avisos
+  ctx.textAlign = 'left'
+  ctx.textBaseline = 'alphabetic'
+  ctx.fillStyle = INK
+  ctx.font = `500 29px ${family}`
+  const avisos = [
+    'Esta carteira é pessoal e intransferível e identifica o atleta registrado na FEM7SOC.',
+    'Deve ser apresentada sempre que solicitada pela arbitragem ou pela organização das competições.',
+    'Em caso de perda ou extravio, comunique imediatamente a Federação.',
+  ]
+  let y = 175
+  for (const aviso of avisos) {
+    const linhas = wrapText(ctx, aviso, CARD_W - 140)
+    ctx.fillStyle = RED
+    ctx.fillRect(60, y - 20, 8, 8)
+    ctx.fillStyle = INK
+    for (const linha of linhas) {
+      ctx.fillText(linha, 86, y)
+      y += 40
+    }
+    y += 18
+  }
+
+  // Emissão e registro
+  const emissao = new Date().toLocaleDateString('pt-BR')
+  ctx.font = `500 26px ${family}`
+  ctx.fillStyle = '#666'
+  ctx.fillText('Registro nº', 60, 560)
+  ctx.fillText('Emissão', 60, 625)
+  ctx.font = `800 34px ${family}`
+  ctx.fillStyle = INK
+  ctx.fillText(formatRegistro(atleta.registro), 210, 560)
+  ctx.fillText(emissao, 210, 625)
+
+  // Assinatura do presidente
+  ctx.strokeStyle = '#555'
+  ctx.lineWidth = 2
+  ctx.beginPath()
+  ctx.moveTo(640, 585)
+  ctx.lineTo(1140, 585)
+  ctx.stroke()
+  ctx.textAlign = 'center'
+  ctx.font = `700 26px ${family}`
+  ctx.fillText('Luiz Gonzaga Siqueira Neto', 890, 620)
+  ctx.font = `500 22px ${family}`
+  ctx.fillStyle = '#666'
+  ctx.fillText('Presidente', 890, 650)
+
+  // Faixa inferior com contato
+  ctx.fillStyle = RED
+  ctx.fillRect(0, 680, CARD_W, CARD_H - 680)
+  ctx.fillStyle = '#ffffff'
+  ctx.font = `700 26px ${family}`
+  ctx.textBaseline = 'middle'
+  ctx.fillText('contato@fem7soc.com.br   •   @fem7soc   •   Belo Horizonte - MG', CARD_W / 2, 720)
+  ctx.textAlign = 'left'
+
+  ctx.restore()
+}
+
+// PDF no tamanho real do cartão (85,6 x 54 mm): página 1 frente, página 2 verso
+export async function montarPdfCarteirinha(atleta: AtletaCarteirinha, fotoUrl: string | null) {
+  const { jsPDF } = await import('jspdf')
+  const frente = document.createElement('canvas')
+  const verso = document.createElement('canvas')
+  frente.width = verso.width = CARD_W
+  frente.height = verso.height = CARD_H
+  await Promise.all([drawCarteirinha(frente, atleta, fotoUrl, false), drawVerso(verso, atleta, false)])
+
+  const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 54] })
+  pdf.addImage(frente.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 85.6, 54)
+  pdf.addPage([85.6, 54], 'landscape')
+  pdf.addImage(verso.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 85.6, 54)
+  return pdf
+}
+
+export async function gerarPdfCarteirinha(atleta: AtletaCarteirinha, fotoUrl: string | null) {
+  const pdf = await montarPdfCarteirinha(atleta, fotoUrl)
+  pdf.save(`carteirinha-fem7soc-${formatRegistro(atleta.registro)}.pdf`)
+}
+
 type Props = {
   atleta: AtletaCarteirinha
   fotoUrl: string | null
+  lado?: 'frente' | 'verso'
   canvasRef?: RefObject<HTMLCanvasElement | null>
 }
 
-export default function Carteirinha({ atleta, fotoUrl, canvasRef }: Props) {
+export default function Carteirinha({ atleta, fotoUrl, lado = 'frente', canvasRef }: Props) {
   const localRef = useRef<HTMLCanvasElement>(null)
   const ref = canvasRef ?? localRef
 
   useEffect(() => {
-    if (ref.current) drawCarteirinha(ref.current, atleta, fotoUrl)
-  }, [ref, atleta, fotoUrl])
+    if (!ref.current) return
+    if (lado === 'verso') drawVerso(ref.current, atleta)
+    else drawCarteirinha(ref.current, atleta, fotoUrl)
+  }, [ref, atleta, fotoUrl, lado])
 
   return (
     <canvas
